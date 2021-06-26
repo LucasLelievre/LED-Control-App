@@ -13,32 +13,35 @@ ledColour::ledColour(int width, int height, int num_leds, int num_leds_x, int nu
     int x[16];
     int y[16];
 
+    // LED colours are the average of 256 samples of a portion of the screen
     float rangeX, rangeY, stepX, stepY, startX, startY;
-
+    // Range is the size of the portion of the screen that will be represented by one LED
     rangeX = (float)this->width / this->num_leds_x;
     rangeY = (float)this->height / this->num_leds_y;
+    // Step is the space between two samples for one LED
     stepX = rangeX / 16.0f;
     stepY = rangeY / 16.0f;
 
     for (int i = 0; i < this->num_leds; i++) { // For each LED...
-
+        // start base on the position of the LED
         startX = rangeX * (float)leds[i][0] + stepX * 0.5f;
         startY = rangeY * (float)leds[i][1] + stepY * 0.5f;
 
         for (int j = 0; j < 16; j++) {
+            // Computing all sample positions
             x[j] = (int)(startX + stepX * (float)j);
             y[j] = (int)(startY + stepY * (float)j);
         }
 
         for (int row = 0; row < 16; row++) {
             for (int col = 0; col < 16; col++) {
+                // computing the XY pos to the index of the pixel in the bitmap data
                 pixelOffset[i][row * 16 + col] = posToIndex((int)x[row], (int)y[col]);
             }
         }
     }
     
     // A special header expected by the Arduino, to identify the beginning of a new bunch data.
-
     serialData[0] = 'o';
     serialData[1] = 'z';
 }
@@ -46,6 +49,7 @@ ledColour::~ledColour() {
 }
 
 char * ledColour::computeColours(std::vector<uint8_t> * screenData) {
+    // screenData is the BGRA bitmap data captured from the screen
 
     this->data_index = 2; // 0, 1 are predefined header
 
@@ -54,19 +58,15 @@ char * ledColour::computeColours(std::vector<uint8_t> * screenData) {
         int g = 0;
         int b = 0;
 
-        for (int o = 0; o < 256; o++)
-        {       //ARGB variable with 32 int bytes where
-            /*
-            r += (int)screenData->data()[(pixelOffset[i][o] + 2)];
-            g += (int)screenData->data()[(pixelOffset[i][o] + 1)];
-            b += (int)screenData->data()[(pixelOffset[i][o] + 0)];
-            */
+        for (int o = 0; o < 256; o++) {
+            // adding all samples to each other
             r += (int)screenData->at(pixelOffset[i][o] + 2);
             g += (int)screenData->at(pixelOffset[i][o] + 1);
             b += (int)screenData->at(pixelOffset[i][o] + 0);
         }
 
-        // Blend new pixel value with the value from the prior frame   
+        // Blend new pixel value with the value from the prior frame
+        // 
         ledColor[i * 3 + 0] = ((r >> 8) * (255 - this->fade) + prevColor[i * 3 + 0] * fade) >> 8;
         ledColor[i * 3 + 1] = ((g >> 8) * (255 - this->fade) + prevColor[i * 3 + 1] * fade) >> 8;
         ledColor[i * 3 + 2] = ((b >> 8) * (255 - this->fade) + prevColor[i * 3 + 2] * fade) >> 8;
