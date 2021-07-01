@@ -1,6 +1,3 @@
-// cppHost.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
 #include <chrono>
 #include <vector>
@@ -14,7 +11,7 @@ int main() {
     std::cout << "Starting ...\n\n";
 
     // screen resolution x and y, nb of LEDS, LED resolution x and y
-    ledColour leds (1366, 728, 60, 30, 16);
+    ledColour leds (1920, 1080, 60, 30, 16);
 
     // screen number (starting with 0)
     ScreenCapture capture (0);
