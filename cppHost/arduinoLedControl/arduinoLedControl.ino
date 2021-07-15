@@ -27,14 +27,14 @@ void setup() {
 void loop() {
   if (Serial.available() > 0) {
     data[index++] = (uint8_t)Serial.read();
-
-    if (index > NUM_DATA) {
+    
+    if (index >= NUM_DATA) {
       index = 0;
       if ((data[0] == 'o') && (data[1] == 'z')) {
         for (int i = 0; i < NUM_LED; i++) {
           int led_index = i * 3 + 2;
           //strip.setPixelColor(i, strip.Color(data[led_index], data[led_index + 1], data[led_index + 2]));
-          leds[i].setRGB((int) data[led_index], (int) data[led_index] + 1, (int) data[led_index] + 2);
+          leds[i].setRGB((int) data[led_index], (int) data[led_index + 1], (int) data[led_index + 2]);
         }
         //strip.show();
         FastLED.show();
