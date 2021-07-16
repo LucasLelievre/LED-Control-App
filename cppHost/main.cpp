@@ -69,9 +69,9 @@ int main() {
 		Sleep(10);
 
 		// Measure time since last loop
-		now = std::chrono::steady_clock::now();
-		std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(now - old).count() << std::endl;
-		old = now;
+		//now = std::chrono::steady_clock::now();
+		//std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(now - old).count() << std::endl;
+		//old = now;
 		//}
 	}
 	std::cout << "Connexion to Arduino lost.\nQuitting.";

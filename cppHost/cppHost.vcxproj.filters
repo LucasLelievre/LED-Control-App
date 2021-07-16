@@ -54,8 +54,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="arduinoLedControl.ino">
-      <Filter>Resource Files</Filter>
-    </None>
+    <None Include="arduinoLedControl\arduinoLedControl.ino" />
   </ItemGroup>
 </Project>
