@@ -1,6 +1,6 @@
 #include "ledColour.h"
 
-ledColour::ledColour(int width, int height, int num_leds, int num_leds_x, int num_leds_y) {
+ledColour::ledColour(int width, int height, float ratio, int num_leds, int num_leds_x, int num_leds_y) {
 
     this->width = width;
     this->height = height;
@@ -18,14 +18,18 @@ ledColour::ledColour(int width, int height, int num_leds, int num_leds_x, int nu
     // Range is the size of the portion of the screen that will be represented by one LED
     rangeX = (float)this->width / this->num_leds_x;
     rangeY = (float)this->height / this->num_leds_y;
-    // Step is the space between two samples for one LED
+    // Step is the space between two samples for one LED (16*16=256 samples)
     stepX = rangeX / 16.0f;
     stepY = rangeY / 16.0f;
+
+    float blackBarHeight = (this->height - (this->width / ratio)) / 2;
 
     for (int i = 0; i < this->num_leds; i++) { // For each LED...
         // start base on the position of the LED
         startX = rangeX * (float)leds[i][0] + stepX * 0.5f;
         startY = rangeY * (float)leds[i][1] + stepY * 0.5f;
+        if (i >= 15 && i <= 45)
+            startY += blackBarHeight;
 
         for (int j = 0; j < 16; j++) {
             // Computing all sample positions

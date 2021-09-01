@@ -35,7 +35,7 @@ public:
     char * computeColours(std::vector<uint8_t>*);
     char * computeColours(BYTE*);
 
-    ledColour(int, int, int, int, int);
+    ledColour(int, int, float, int, int, int);
     ~ledColour();
 };
 

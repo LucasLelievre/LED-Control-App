@@ -11,7 +11,9 @@ int main() {
 	std::cout << "Starting ...\n\n";
 
 	// screen resolution x and y, nb of LEDS, LED resolution x and y
-	ledColour leds(1920, 1080, 60, 30, 16);
+	ledColour leds(1920, 1080, (16./9.), 60, 30, 16);
+	//ledColour leds(1920, 1080, 2., 60, 30, 16);
+	//ledColour leds(1920, 1080, 2.39, 60, 30, 16);
 
 	// screen number (starting with 0)
 	ScreenCapture capture(1);
