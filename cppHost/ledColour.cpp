@@ -26,8 +26,8 @@ ledColour::ledColour(int width, int height, float ratio, int num_leds, int num_l
 
     for (int i = 0; i < this->num_leds; i++) { // For each LED...
         // start base on the position of the LED
-        startX = rangeX * (float)leds[i][0] + stepX * 0.5f;
-        startY = rangeY * (float)leds[i][1] + stepY * 0.5f;
+        startX = rangeX * (float)LEDposX(i) + stepX * 0.5f;
+        startY = rangeY * (float)LEDposY(i) + stepY * 0.5f;
         if (i >= 15 && i <= 45)
             startY += blackBarHeight;
 
@@ -117,4 +117,10 @@ char* ledColour::computeColours(BYTE * screenData) {
 
 int ledColour::posToIndex(int x, int y) {
     return (x + (y * this->width)) * 4;
+}
+int ledColour::LEDposX(int led) {
+    return min(max(led - 15, 0), 29);
+}
+int ledColour::LEDposY(int led) {
+    return max(abs((float)led - 29.5) - 14.5, 0.);
 }
