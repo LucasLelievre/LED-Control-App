@@ -24,7 +24,7 @@
     <ProjectGuid>{4b5536ed-758f-40e2-a447-dd61af083479}</ProjectGuid>
     <RootNamespace>cppHost</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>LED Control</ProjectName>
+    <ProjectName>LED_Control</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

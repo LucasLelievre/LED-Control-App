@@ -1,12 +1,18 @@
 #include "ledColour.h"
 
-ledColour::ledColour(int width, int height, float ratio, int num_leds, int num_leds_x, int num_leds_y) {
+//ledColour::ledColour(int width, int height, float ratio, int num_leds, int num_leds_x, int num_leds_y) {
+ledColour::ledColour(int* args, float ratio) {
 
-    this->width = width;
+    /*this->width = width;
     this->height = height;
     this->num_leds = num_leds;
     this->num_leds_x = num_leds_x;
-    this->num_leds_y = num_leds_y;
+    this->num_leds_y = num_leds_y;*/
+    this->width = args[0];
+    this->height = args[1];
+    this->num_leds = args[2];
+    this->num_leds_x = args[3];
+    this->num_leds_y = args[4];
 
     // Initialising pixelOffset data
 
@@ -39,8 +45,8 @@ ledColour::ledColour(int width, int height, float ratio, int num_leds, int num_l
 
         for (int row = 0; row < 16; row++) {
             for (int col = 0; col < 16; col++) {
-                // computing the XY pos to the index of the pixel in the bitmap data
-                pixelOffset[i][row * 16 + col] = posToIndex((int)x[row], (int)y[col]);
+                // computing the index of the pixel in the bitmap data from the XY position
+                pixelOffset[i][row * 16 + col] = (x[row] + (y[col] * this->width)) * 4;
             }
         }
     }

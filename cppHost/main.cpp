@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+#include <string>
 #include <chrono>
 #include <vector>
 #include <Windows.h>
@@ -7,16 +9,37 @@
 #include "ScreenCapture.h"
 #include "ledColour.h"
 
-int main() {
-	std::cout << "Starting ...\n\n";
+int main(int argc, char** argv) {
+	if (argc != 10) {
+		std::cerr << "Usage : screen number (start at 0), screen res X, screen res Y, nb of LEDs in total, nb of LEDs on top, nb of LEDs on each sides, arduino com port, frame rate, image aspect ratio";
+		exit(0);
+	}
+	std::cout << argv[0] << "\n\nStarting ...\n\n";
 
-	// screen resolution x and y, nb of LEDS, LED resolution x and y
-	ledColour leds(1920, 1080, (16./9.), 60, 30, 16);
-	//ledColour leds(1920, 1080, 2., 60, 30, 16);
-	//ledColour leds(1920, 1080, 2.39, 60, 30, 16);
+	//for (int i = 0; i < argc; ++i) std::cout << argv[i] << "\n";
+
+	// Reading the arguments about screen size and LEDs
+	int args[5];
+	for (int i = 1; i < 6; i++)
+		sscanf_s(argv[i+1], "%d", &args[i]);
+
+	// Reading the framerate argument
+	float frameRate;
+	sscanf_s(argv[7], "%f", &frameRate);
+	// translate the number of images per second to the number of milliseconds needed to wait to acheive the framerate
+	frameRate = floor(1000 / frameRate) - 6;
+
+	// Reading the aspect ratio argument
+	float ratio;
+	sscanf_s(argv[8], "%f", &ratio);
+
+	int numScreen;
+	sscanf_s(argv[1], "%d", &numScreen);
+
+	ledColour leds(args, ratio);
 
 	// screen number (starting with 0)
-	ScreenCapture capture(1);
+	ScreenCapture capture(numScreen);
 	std::string err = capture.Initialize();
 	//ScreenCapture_old capture_old(1920, 1080);
 
@@ -26,20 +49,21 @@ int main() {
 		return 1;
 	}
 
-
-	std::cout << "Connecting to Arduino...\n\n";
-	SerialArduino* arduino = new SerialArduino("\\\\.\\COM7");
+	std::string port = "\\\\.\\";
+	port.append(argv[6]);
+	std::cout << "Connecting to Arduino on port " << port << "...\n\n";
+	
+	SerialArduino* arduino = new SerialArduino(port.c_str());
 	if (arduino->IsConnected()) {
 		std::cout << "Arduino connected.\n\n";
-	}
-	else {
+	} else {
 		std::cout << "Connexion to Arduino failed.\nQuitting.";
 		return 1;
 	}
 
 	// Initializing time measuring.
-	auto now = std::chrono::steady_clock::now();
-	auto old = now;
+	//auto now = std::chrono::steady_clock::now();
+	//auto old = now;
 
 	std::cout << "App initialised.\n\nSending data.\n\n";
 	//while (arduino->IsConnected()) {
@@ -47,8 +71,10 @@ int main() {
 
 		// Capture screen data, then compute the LED colours
 		//if (capture.CaptureNext()) {
+		
 		capture.CaptureNext();
 		char* serialData = leds.computeColours(capture.getScreenData());
+
 		//capture_old.screenShotDesktop();
 		//char* serialData = host.computeColours(capture_old.getScreenData());
 
@@ -65,10 +91,10 @@ int main() {
 		}*/
 
 		// Send the data to the arduino
-		arduino->WriteData(serialData, 60 * 3 + 2);
+		arduino->WriteData(serialData, args[2] * 3 + 2);
 
 		// Sleeping to achieve a lower use of the cpu
-		Sleep(10);
+		Sleep(frameRate);
 
 		// Measure time since last loop
 		//now = std::chrono::steady_clock::now();
@@ -76,5 +102,5 @@ int main() {
 		//old = now;
 		//}
 	}
-	std::cout << "Connexion to Arduino lost.\nQuitting.";
+	//std::cout << "Connexion to Arduino lost.\nQuitting.";
 }
