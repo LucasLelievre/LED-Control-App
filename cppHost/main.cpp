@@ -16,22 +16,22 @@ int main(int argc, char** argv) {
 	}
 	std::cout << argv[0] << "\n\nStarting ...\n\n";
 
-	//for (int i = 0; i < argc; ++i) std::cout << argv[i] << "\n";
+	// for (int i = 0; i < argc; ++i) std::cout << i << " - " << argv[i] << "\n";
 
 	// Reading the arguments about screen size and LEDs
 	int args[5];
-	for (int i = 1; i < 6; i++)
-		sscanf_s(argv[i+1], "%d", &args[i]);
+	for (int i = 0; i < 5; i++)
+		sscanf_s(argv[i+2], "%d", &args[i]);
 
 	// Reading the framerate argument
 	float frameRate;
-	sscanf_s(argv[7], "%f", &frameRate);
+	sscanf_s(argv[8], "%f", &frameRate);
 	// translate the number of images per second to the number of milliseconds needed to wait to acheive the framerate
 	frameRate = floor(1000 / frameRate) - 6;
 
 	// Reading the aspect ratio argument
 	float ratio;
-	sscanf_s(argv[8], "%f", &ratio);
+	sscanf_s(argv[9], "%f", &ratio);
 
 	int numScreen;
 	sscanf_s(argv[1], "%d", &numScreen);
@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
 	}
 
 	std::string port = "\\\\.\\";
-	port.append(argv[6]);
+	port.append(argv[7]);
 	std::cout << "Connecting to Arduino on port " << port << "...\n\n";
 	
 	SerialArduino* arduino = new SerialArduino(port.c_str());
