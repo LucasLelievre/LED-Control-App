@@ -81,9 +81,9 @@ char * ledColour::computeColours(std::vector<uint8_t> * screenData) {
         ledColor[i * 3 + 1] = ((g >> 8) * (255 - this->fade) + prevColor[i * 3 + 1] * fade) >> 8;
         ledColor[i * 3 + 2] = ((b >> 8) * (255 - this->fade) + prevColor[i * 3 + 2] * fade) >> 8;
 
-        serialData[data_index++] = (byte)ledColor[i * 3 + 0];
-        serialData[data_index++] = (byte)ledColor[i * 3 + 1];
-        serialData[data_index++] = (byte)ledColor[i * 3 + 2];
+        serialData[data_index++] = (char)ledColor[i * 3 + 0];
+        serialData[data_index++] = (char)ledColor[i * 3 + 1];
+        serialData[data_index++] = (char)ledColor[i * 3 + 2];
     }
 
     std::copy(ledColor, ledColor+180, prevColor);
@@ -91,7 +91,7 @@ char * ledColour::computeColours(std::vector<uint8_t> * screenData) {
     return this->serialData;
 }
 
-char* ledColour::computeColours(BYTE * screenData) {
+/*char* ledColour::computeColours(char * screenData) {
 
     this->data_index = 2; // 0, 1 are predefined header
 
@@ -112,21 +112,21 @@ char* ledColour::computeColours(BYTE * screenData) {
         ledColor[i * 3 + 0] = g / 256;
         ledColor[i * 3 + 0] = b / 256;
 
-        serialData[data_index++] = (byte)ledColor[i * 3 + 0];
-        serialData[data_index++] = (byte)ledColor[i * 3 + 0];
-        serialData[data_index++] = (byte)ledColor[i * 3 + 0];
+        serialData[data_index++] = (char)ledColor[i * 3 + 0];
+        serialData[data_index++] = (char)ledColor[i * 3 + 0];
+        serialData[data_index++] = (char)ledColor[i * 3 + 0];
     }
 
     delete[] screenData;
     return this->serialData;
-}
+}*/
 
 int ledColour::posToIndex(int x, int y) {
     return (x + (y * this->width)) * 4;
 }
 int ledColour::LEDposX(int led) {
-    return min(max(led - 15, 0), 29);
+    return std::min(std::max(led - 15, 0), 29);
 }
 int ledColour::LEDposY(int led) {
-    return max(abs((float)led - 29.5) - 14.5, 0.);
+    return std::max(abs((float)led - 29.5) - 14.5, 0.);
 }

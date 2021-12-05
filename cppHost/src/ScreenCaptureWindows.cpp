@@ -1,14 +1,10 @@
-#include "ScreenCapture.h"
+#include "ScreenCaptureWindows.h"
 
-ScreenCapture::ScreenCapture(int outputNumber) {
-	this->OutputNumber = outputNumber;
-}
-
-ScreenCapture::~ScreenCapture() {
+ScreenCaptureWindows::~ScreenCaptureWindows() {
 	Close();
 }
 
-std::string ScreenCapture::Initialize() {
+std::string ScreenCaptureWindows::Initialize() {/*
 	// Get desktop
 	HDESK hDesk = OpenInputDesktop(0, FALSE, GENERIC_ALL);
 	if (!hDesk)
@@ -102,11 +98,11 @@ std::string ScreenCapture::Initialize() {
 		}
 		return "DuplicateOutput failed: " + hr;
 		//return ProcessFailure(m_Device, L"Failed to get duplicate output in DUPLICATIONMANAGER", L"Error", hr, CreateDuplicationExpectedErrors);
-	}
-	return "";
+	}*/
+	return "windows";
 }
 
-void ScreenCapture::Close() {
+void ScreenCaptureWindows::Close() {/*
 	if (DeskDupl)
 		DeskDupl->Release();
 
@@ -119,10 +115,10 @@ void ScreenCapture::Close() {
 	DeskDupl = nullptr;
 	D3DDeviceContext = nullptr;
 	D3DDevice = nullptr;
-	HaveFrameLock = false;
+	HaveFrameLock = false;*/
 }
 
-bool ScreenCapture::CaptureNext() {
+bool ScreenCaptureWindows::CaptureNext() {/*
 	if (!DeskDupl)
 		return false;
 
@@ -203,12 +199,12 @@ bool ScreenCapture::CaptureNext() {
 	cpuTex->Release();
 	gpuTex->Release();
 
-	return ok;
+	return ok;*/
+	return false;
 }
 
 
-std::vector<uint8_t>* ScreenCapture::getScreenData() {
-//BYTE* ScreenCapture::getScreenData() {
-	return &(this->Latest.Buf);
-	//return this->Latest.Buf;
+std::vector<uint8_t>* ScreenCaptureWindows::getScreenData() {
+	// return &(this->Latest.Buf);
+	return NULL;
 }

@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
-#include <Windows.h>
 #include <vector>
+#include <algorithm>
 
 class ledColour
 {
@@ -29,7 +29,7 @@ private:
 
 public:
     char * computeColours(std::vector<uint8_t>*);
-    char * computeColours(BYTE*);
+    //char * computeColours(char*);
 
     //ledColour(int, int, float, int, int, int);
     ledColour(int*, float);
